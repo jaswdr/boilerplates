@@ -1,0 +1,53 @@
+---
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: http-dump
+
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: http-dump
+  template:
+    metadata:
+      labels:
+        app: http-dump
+    spec:
+      containers:
+        - name: http-dump
+          image: ghcr.io/jaswdr/http-dump:master
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 80
+              name: http
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: http-dump
+
+spec:
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: http
+  selector:
+    app: http-dump
+---
+kind: Ingress
+apiVersion: networking.k8s.io/v1
+metadata:
+  name: http-dump
+
+spec:
+  rules:
+    - http:
+        paths:
+          - path: /dump
+            pathType: Prefix
+            backend:
+              service:
+                name: http-dump
+                port:
+                  number: 80

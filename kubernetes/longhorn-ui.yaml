@@ -1,0 +1,18 @@
+kind: Ingress
+apiVersion: networking.k8s.io/v1
+metadata:
+  name: longhorn-frontend
+  namespace: longhorn-system
+
+spec:
+  rules:
+    - host: longhorn.bar.com
+      http:
+        paths:
+          - pathType: Prefix
+            path: "/"
+            backend:
+              service:
+                name: longhorn-frontend
+                port:
+                  number: 80
