@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: debug
+spec:
+  restartPolicy: Always
+  containers:
+  - name: debugger
+    image: alpine
+    imagePullPolicy: IfNotPresent
+    command:
+      - sleep
+      - infinity
